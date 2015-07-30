@@ -27,4 +27,6 @@ class Dispatcher {
   }
 }
 
-export = Dispatcher;
+
+/// var result = new Dispatcher();
+export = new Dispatcher();

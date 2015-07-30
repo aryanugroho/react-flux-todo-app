@@ -12,12 +12,6 @@ class Example extends React.Component<any, any> {
   }
 
   render() {
-    /// testing
-    let d = new Dispatcher();
-    d.register(() => {
-      console.log('lorem dispatched');
-    });
-
     return (
       <div>This is an example class!</div>
     );
