@@ -1,7 +1,7 @@
 /// <reference path="../../typing/react.d.ts" />
 
-import React = require('react');
-import Dispatcher = require('./dispatcher/Dispatcher');
+import * as React from 'react';
+import Dispatcher from './dispatcher/Dispatcher';
 
 class Example extends React.Component<any, any> {
   private foo: number;
@@ -18,4 +18,4 @@ class Example extends React.Component<any, any> {
   }
 }
 
-export = Example;
+export default Example;

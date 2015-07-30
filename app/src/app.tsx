@@ -1,8 +1,8 @@
 /// <reference path="../../typing/react.d.ts" />
 
-import React = require('react');
-import Example = require('./example');
-import ChangeColorAction = require('./actions/ChangeColorAction');
+import ChangeColorAction from './actions/ChangeColorAction';
+import * as React from 'react';
+import Example from './example';
 
 class BoxProps {
     public width: number;

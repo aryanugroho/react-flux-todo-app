@@ -27,6 +27,4 @@ class Dispatcher {
   }
 }
 
-
-/// var result = new Dispatcher();
-export = new Dispatcher();
+export default Dispatcher;
