@@ -2,35 +2,50 @@
 
 import React = require('react');
 import Example = require('./example');
+import ChangeColorAction = require('./actions/ChangeColorAction');
 
-class DemoProps {
-    public name: string;
-    public age: number;
+class BoxProps {
+    public width: number;
+    public height: number;
+    public color: string;
 }
 
-class App extends React.Component<DemoProps, any> {
-  constructor(props: DemoProps) {
+class App extends React.Component<BoxProps, any> {
+  constructor(props: BoxProps) {
     super(props);
     this.state = {};
-    this.state.hidden = true;
   }
 
-  open() {
+  getInitialState(): Object {
+    return {
+        color: '#99FFAA'
+    };
+  }
+
+  change(event): void {
+    let color: string = event.target.value;
+    ChangeColorAction.changeColor(color);
     this.setState({
-      hidden: !this.state.hidden
+      color: color
     });
+
   }
 
   render() {
-    var classNames:string = 'box';
-    if (this.state.hidden === true) {
-        classNames = 'box hidden';
-    }
+    let classNames:string = 'box';
+
+    let divStyle = {
+      backgroundColor: this.state.color,
+      width: this.props.width,
+      height: this.props.height
+
+    };
 
     return (
       <div>
-        <button onClick={this.open.bind(this)}>Click Me!!</button>
-        <div className={classNames}>
+        <Example />
+        <input type="color" onChange={this.change.bind(this)}></input>
+        <div className={classNames} style={divStyle}>
         </div>
       </div>
     );
@@ -38,6 +53,6 @@ class App extends React.Component<DemoProps, any> {
 }
 
  React.render(
-    <App age={25} name="Nikola" />,
+    <App width={300} height={300} color={"#336699"} />,
     document.getElementById('example')
 );
