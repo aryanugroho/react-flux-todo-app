@@ -27,4 +27,4 @@ class Dispatcher {
   }
 }
 
-export default Dispatcher;
+export default new Dispatcher();
