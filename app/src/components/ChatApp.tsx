@@ -1,69 +1,63 @@
-/// <reference path="../../typing/react.d.ts" />
+/// <reference path="../../../typing/react.d.ts" />
 
-import Example from './example';
-import ColorStore from './stores/ColorStore';
-import ChangeColorAction from './actions/ChangeColorAction';
+import ColorStore from '../stores/ColorStore';
+import ColorInserter from './ColorInserter';
+import ColorList from './ColorList';
+import ChangeColorAction from '../actions/ChangeColorAction';
+import * as React from 'react';
 
-class App extends React.Component<any> {
-  constructor(props) {
+class ChatApp extends React.Component<any, any> {
+  color: string;
+
+  constructor(props: any) {
     super(props);
     this.state = {};
-
   }
 
   componentDidMount(): void {
     let self = this;
+
     ColorStore.on('change', (ev) => {
       self.setState({
-        allColors: ColorStore.getAll()
+        allColors: ColorStore.getAll(),
+        lastColor: ColorStore.getLastColor()
       });
     });
   }
 
   getInitialState(): Object {
     return {
-      color: '#99FFAA',
       allColors: ColorStore.getAll(),
-      changedColor: null
+      lastColor: null
     };
   }
 
-  change(event): void {
-    let color: string = event.target.value;
-    ChangeColorAction.changeColor(color);
-
+  changeColor(event: any): void {
+    let color = event.target.value;
     this.setState({
-      color: color,
-      allColors: ColorStore.getAll()
+      allColors: ColorStore.getAll(),
+      lastColor: color
     });
   }
 
-  insert(color: string): void {
-    if (this.state.color) {
-      ChangeColorAction.insertColor(color);
-    }
-  }
-
   render() {
+    let lastColor = this.state.lastColor;
     let divStyle = {
-      backgroundColor: this.state.color,
-      width: this.props.width,
-      height: this.props.height
+      backgroundColor: lastColor,
+      width: 200,
+      height: 200
     };
 
     return (
       <div>
-        <Example />
-
-        <input type="color" onChange={this.change.bind(this)}>
-        </input>
-        <button onClick={this.insert.bind(this, this.state.color)}>
-          Insert
-        </button>
-
-        <div className={"box"} style={divStyle}>
+        <div style={divStyle}></div>
+        <ColorInserter lastColor={this.state.lastColor} />
+        <ColorList colors={this.state.allColors}/>
+        <div className={"box"}>
         </div>
       </div>
     );
   }
 }
+
+export default ChatApp;
