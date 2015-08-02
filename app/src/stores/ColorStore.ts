@@ -1,7 +1,6 @@
 /// <reference path="../../../typing/eventemitter2.d.ts" />
 /// <reference path="../../../typing/object-assign.d.ts" />
 
-///import * as EventEmitter from 'eventemitter3';
 import * as event from 'eventemitter2';
 import Dispatcher from '../dispatcher/Dispatcher';
 import ActionTypes from '../constants/ActionTypes';
@@ -11,33 +10,29 @@ import assign = require('object-assign');
 let EventEmitter = event.EventEmitter2;
 let CHANGE_EVENT = 'change';
 
-// probably like this because they want to make it private
 let _colors = [];
+let _lastColor = null;
 
 function insert(color: string) : void {
   _colors.push(color);
 }
 
-let ColorStore = assign(EventEmitter.prototype, {
+function change(color: string): void {
+  _lastColor = color;
+}
+
+let ColorStore = assign(EventEmitter.prototype, <any> {
+
   emitChange: () => {
-    debugger;
-    ColorStore.emit('change');
+    this.default.emit(CHANGE_EVENT);
   },
 
   getAll: () => {
     return _colors;
   },
 
-  /**
-   * attaches a callback to a change event
-   * @param {Function} callback to be executed on the event
-   */
-  addChangeListener: (callback: Function) => {
-    // super.on(CHANGE_EVENT, callback);
-  },
-
-  removeChangeListener: (callback: Function) => {
-    // super.removeListener(CHANGE_EVENT, callback);
+  getLastColor: () => {
+    return _lastColor;
   }
 });
 
@@ -48,6 +43,13 @@ Dispatcher.register((action) => {
         insert(action.color);
         ColorStore.emitChange();
       }
+      break;
+    case ActionTypes.CHANGE_COLOR_ACTION:
+      if (action.color !== '') {
+        change(action.color);
+        ColorStore.emitChange();
+      }
+      break;
   }
 });
 
