@@ -2,7 +2,7 @@
 import * as React from 'react';
 import ChatApp from './components/ChatApp';
 
- React.render(
-    <ChatApp />,
-    document.getElementById('example')
+React.render(
+  <ChatApp />,
+  document.getElementById('example')
 );
