@@ -12,8 +12,9 @@ class TodoLegend extends React.Component<any, any> {
     debugger;
     return (
       <div>
-        All: {this.props.count}
-        Checked: {this.props.completeCount}
+        <p>All: {this.props.count}</p>
+        <p>Complete: {this.props.completeCount}</p>
+        <p>Incomplete: {this.props.incompleteCount}</p>
       </div>
     );
   }

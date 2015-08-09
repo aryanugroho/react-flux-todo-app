@@ -25,7 +25,7 @@ class ChatApp extends React.Component<any, any> {
         allTodos: TodoStore.getAll(),
         todoCount: TodoStore.getCount(),
         completeCount: TodoStore.getCompleteCount(),
-        incompleteCount: TodoStore.getIncomplete(),
+        incompleteCount: TodoStore.getIncompleteCount(),
         text: TodoStore.getText()
       });
     });
@@ -47,6 +47,7 @@ class ChatApp extends React.Component<any, any> {
         <TodoLegend
           count={this.state.todoCount}
           completeCount={this.state.completeCount}
+          incompleteCount={this.state.incompleteCount}
         />
 
       </div>

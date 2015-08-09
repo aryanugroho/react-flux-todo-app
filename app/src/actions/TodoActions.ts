@@ -9,11 +9,11 @@ export default {
     });
   },
 
-  check(todo: any, val: any): void {
+  check(todo: any, checked: boolean): void {
     Dispatcher.dispatch({
         type: ActionTypes.CHECK_TODO_ACTION,
         todo: todo,
-        val: val
+        checked: checked
     });
   },
 
