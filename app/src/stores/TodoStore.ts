@@ -38,6 +38,15 @@ function destroy(id: any) : void {
   delete _todos[id];
 }
 
+/**
+ * Checks a todo item
+ * @param {boolean} checked whether the todo is checked
+ */
+function check(todo:any, checked: boolean): void {
+  let index = _todos.indexOf(todo);
+  _todos[index] = todo.set('complete', checked);
+}
+
 let TodoStore = assign(EventEmitter.prototype, <any> {
 
   emitChange: () => {
@@ -75,13 +84,13 @@ let TodoStore = assign(EventEmitter.prototype, <any> {
   getCompleteCount: () => {
     return _todos.filter((todo) => {
       return todo.complete;
-    });
+    }).length;
   },
 
   getIncompleteCount: () => {
     return _todos.filter((todo) => {
       return !todo.complete;
-    });
+    }).length;
   },
 
    /**
@@ -104,7 +113,7 @@ let TodoStore = assign(EventEmitter.prototype, <any> {
  */
 Dispatcher.register((action) => {
   let text = action.text;
-  let value = action.value;
+  let checked = action.checked;
 
   switch (action.type) {
     case TodoActionTypes.CREATE_TODO_ACTION:
@@ -122,9 +131,8 @@ Dispatcher.register((action) => {
       break;
 
     case TodoActionTypes.CHECK_TODO_ACTION:
-      if (value !== '') {
+        check(action.todo, action.checked);
         TodoStore.emitChange();
-      }
       break;
   }
 });
