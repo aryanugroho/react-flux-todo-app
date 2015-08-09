@@ -1,9 +1,12 @@
 /// <reference path="../../../typing/react.d.ts" />
 
 import ColorStore from '../stores/ColorStore';
+import TodoStore from '../stores/TodoStore';
 import ColorInserter from './ColorInserter';
+import TodoList from './todo/TodoList';
+import TodoCreator from './todo/TodoCreator';
+import TodoLegend from './todo/TodoLegend';
 import ColorList from './ColorList';
-import ChangeColorAction from '../actions/ChangeColorAction';
 import * as React from 'react';
 
 class ChatApp extends React.Component<any, any> {
@@ -17,10 +20,13 @@ class ChatApp extends React.Component<any, any> {
   componentDidMount(): void {
     let self = this;
 
-    ColorStore.on('change', (ev) => {
+    TodoStore.on('change', (ev) => {
       self.setState({
-        allColors: ColorStore.getAll(),
-        lastColor: ColorStore.getLastColor()
+        allTodos: TodoStore.getAll(),
+        todoCount: TodoStore.getCount(),
+        completeCount: TodoStore.getCompleteCount(),
+        incompleteCount: TodoStore.getIncomplete(),
+        text: TodoStore.getText()
       });
     });
   }
@@ -28,33 +34,21 @@ class ChatApp extends React.Component<any, any> {
   getInitialState(): Object {
     return {
       allColors: ColorStore.getAll(),
+      todos: [],
       lastColor: null
     };
   }
 
-  changeColor(event: any): void {
-    let color = event.target.value;
-    this.setState({
-      allColors: ColorStore.getAll(),
-      lastColor: color
-    });
-  }
-
   render() {
-    let lastColor = this.state.lastColor;
-    let divStyle = {
-      backgroundColor: lastColor,
-      width: 200,
-      height: 200
-    };
-
     return (
       <div>
-        <div style={divStyle}></div>
-        <ColorInserter lastColor={this.state.lastColor} />
-        <ColorList colors={this.state.allColors}/>
-        <div className={"box"}>
-        </div>
+        <TodoCreator text={this.state.text} />
+        <TodoList todos={this.state.allTodos} />
+        <TodoLegend
+          count={this.state.todoCount}
+          completeCount={this.state.completeCount}
+        />
+
       </div>
     );
   }

@@ -15,7 +15,9 @@ class ColorItem extends React.Component<any, any> {
     };
 
     return (
-      <div style={divStyle}></div>
+      <div>
+        <div style={divStyle}></div>
+      </div>
     );
   }
 }
