@@ -1,8 +1,8 @@
 /// <reference path="../../typing/react.d.ts" />
 import * as React from 'react';
-import ChatApp from './components/ChatApp';
+import TodoApp from './components/TodoApp';
 
 React.render(
-  <ChatApp />,
+  <TodoApp />,
   document.getElementById('example')
 );

@@ -17,7 +17,7 @@ function getTodoStoreData(): Object {
   };
 }
 
-class ChatApp extends React.Component<any, any> {
+class TodoApp extends React.Component<any, any> {
   color: string;
 
   constructor(props: any) {
@@ -53,4 +53,4 @@ class ChatApp extends React.Component<any, any> {
   }
 }
 
-export default ChatApp;
+export default TodoApp;
