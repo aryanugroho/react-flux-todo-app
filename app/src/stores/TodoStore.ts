@@ -109,11 +109,14 @@ let TodoStore = assign(EventEmitter.prototype, <any> {
 });
 
 /**
- * TODO: Do those without a switch-case
+ * TODO: Do those without a switch-case and with hashmap
+ * TODO: make an interface for Payload
  */
-Dispatcher.register((action) => {
+Dispatcher.register((action: any) => {
   let text = action.text;
   let checked = action.checked;
+
+  debugger;
 
   switch (action.type) {
     case TodoActionTypes.CREATE_TODO_ACTION:
