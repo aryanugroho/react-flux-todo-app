@@ -10,11 +10,6 @@ class TodoInserter extends React.Component<any, any> {
     this.state = {};
   }
 
-  create(text: string): void {
-    debugger;
-    TodoActions.create(text);
-  }
-
   changeText(ev) : void {
     TodoActions.changeText(ev.target.value);
   }
@@ -25,9 +20,9 @@ class TodoInserter extends React.Component<any, any> {
         <input type="text"
           onChange={this.changeText.bind(this)}>
         </input>
-          <button onClick={this.create.bind(this, this.props.text)}>
-            Insert
-          </button>
+        <button onClick={this.props.onCreate.bind(this, this.props.text)}>
+          Insert
+        </button>
       </div>
     );
   }
