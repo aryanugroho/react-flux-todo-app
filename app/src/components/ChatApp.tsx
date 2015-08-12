@@ -1,48 +1,46 @@
 /// <reference path="../../../typing/react.d.ts" />
 
-import ColorStore from '../stores/ColorStore';
 import TodoStore from '../stores/TodoStore';
-import ColorInserter from './ColorInserter';
 import TodoList from './todo/TodoList';
 import TodoCreator from './todo/TodoCreator';
 import TodoLegend from './todo/TodoLegend';
-import ColorList from './ColorList';
 import * as React from 'react';
+import TodoActions from '../actions/TodoActions';
+
+function getTodoStoreData(): Object {
+  return {
+    allTodos: TodoStore.getAll(),
+    todoCount: TodoStore.getCount(),
+    completeCount: TodoStore.getCompleteCount(),
+    incompleteCount: TodoStore.getIncompleteCount(),
+    text: TodoStore.getText()
+  };
+}
 
 class ChatApp extends React.Component<any, any> {
   color: string;
 
   constructor(props: any) {
     super(props);
-    this.state = {};
+    this.state = getTodoStoreData();
+  }
+
+  onCreate(text: string): void {
+    TodoActions.create(text);
   }
 
   componentDidMount(): void {
     let self = this;
 
     TodoStore.on('change', (ev) => {
-      self.setState({
-        allTodos: TodoStore.getAll(),
-        todoCount: TodoStore.getCount(),
-        completeCount: TodoStore.getCompleteCount(),
-        incompleteCount: TodoStore.getIncompleteCount(),
-        text: TodoStore.getText()
-      });
+      self.setState(getTodoStoreData());
     });
-  }
-
-  getInitialState(): Object {
-    return {
-      allColors: ColorStore.getAll(),
-      todos: [],
-      lastColor: null
-    };
   }
 
   render() {
     return (
       <div>
-        <TodoCreator text={this.state.text} />
+        <TodoCreator text={this.state.text} onCreate={this.onCreate} />
         <TodoList todos={this.state.allTodos} />
         <TodoLegend
           count={this.state.todoCount}
