@@ -1,8 +1,6 @@
 import Dispatcher from '../dispatcher/Dispatcher';
 import ActionTypes from '../constants/TodoActionTypes';
 
-debugger;
-
 export default {
   changeText(text: string): void {
     Dispatcher.dispatch({
