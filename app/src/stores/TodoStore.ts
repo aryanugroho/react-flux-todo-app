@@ -1,6 +1,8 @@
 /// <reference path="../../../typing/eventemitter2.d.ts" />
 /// <reference path="../../../typing/object-assign.d.ts" />
+/// <reference path="../../../typing/immutable.d.ts" />
 
+import * as Immutable from 'immutable';
 import * as event from 'eventemitter2';
 import Dispatcher from '../dispatcher/Dispatcher';
 import TodoActionTypes from '../constants/TodoActionTypes';
@@ -10,10 +12,14 @@ import Todo from '../models/Todo';
 let EventEmitter = event.EventEmitter2;
 let CHANGE_EVENT = 'change';
 
-let _todos = [];
+let _todos = Immutable.List<Todo>();
+
 let _text = '';
+
+/**
+ * Tracks the last entered text for the todo about to be created
+ */
 function changeText(text: string): void {
-  console.log(text);
   _text = text;
 }
 
@@ -23,7 +29,7 @@ function changeText(text: string): void {
  */
 function create(text: string) : void {
   let id = Date.now();
-  _todos.push(new Todo({
+  _todos = _todos.push(new Todo({
     id: id,
     complete: false,
     text: text
@@ -42,9 +48,9 @@ function destroy(id: any) : void {
  * Checks a todo item
  * @param {boolean} checked whether the todo is checked
  */
-function check(todo:any, checked: boolean): void {
+function check(todo: any, checked: boolean): void {
   let index = _todos.indexOf(todo);
-  _todos[index] = todo.set('complete', checked);
+  _todos = _todos.set(index, todo.set('complete', checked));
 }
 
 let TodoStore = assign(EventEmitter.prototype, <any> {
@@ -61,39 +67,56 @@ let TodoStore = assign(EventEmitter.prototype, <any> {
     return _todos;
   },
 
+  /**
+   * Get the last written text
+   * @return {string}
+   */
   getText: () => {
     return _text;
   },
 
+  /**
+   * Get all the complete todos
+   * @return {Immutable.List}
+   */
   getComplete: () => {
-    return _todos.filter((todo) => {
-      return todo.complete;
-    });
+    return _todos.filter((todo) => todo.complete);
   },
 
+  /**
+   * Get all the incomplete todos
+   * @return {Immutable.List}
+   */
   getIncomplete: () => {
-    return _todos.filter((todo) => {
-      return !todo.complete;
-    });
+    return _todos.filter((todo) => !todo.complete);
   },
 
+  /**
+   * Gets the size of the todo list
+   * @return {number}
+   */
   getCount: () => {
-    return _todos.length;
+    return _todos.size;
   },
 
+  /**
+   * Gets the count of the complete todos
+   * @return {number}
+   */
   getCompleteCount: () => {
-    return _todos.filter((todo) => {
-      return todo.complete;
-    }).length;
+    return _todos.filter((todo) => todo.complete).size;
   },
 
+  /**
+   * Gets the count of the incomplete todos
+   * @return {number}
+   */
   getIncompleteCount: () => {
-    return _todos.filter((todo) => {
-      return !todo.complete;
-    }).length;
+    return _todos.filter((todo) => !todo.complete).size;
   },
 
-   /**
+  /**
+   * Adds an event using the Event Emitter
    * @param {function} callback
    */
   addChangeListener: (callback: Function) => {
@@ -101,6 +124,7 @@ let TodoStore = assign(EventEmitter.prototype, <any> {
   },
 
   /**
+   * Removes an event using the Event Emitter
    * @param {function} callback
    */
   removeChangeListener: (callback: Function) => {
@@ -109,14 +133,11 @@ let TodoStore = assign(EventEmitter.prototype, <any> {
 });
 
 /**
- * TODO: Do those without a switch-case and with hashmap
  * TODO: make an interface for Payload
  */
 Dispatcher.register((action: any) => {
   let text = action.text;
   let checked = action.checked;
-
-  debugger;
 
   switch (action.type) {
     case TodoActionTypes.CREATE_TODO_ACTION:
